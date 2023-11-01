@@ -27,6 +27,11 @@ func main() {
 			"faq.gohtml", "tailwind.gohtml",
 		))))
 
+	r.Get("/signup", controllers.StaticHandler(views.Must(
+		views.ParseFS(templates.FS,
+			"signup.gohtml", "tailwind.gohtml",
+		))))
+
 	r.Get("/welcome", controllers.StaticHandler(
 		views.Must(views.ParseFS(templates.FS, "welcome.gohtml"))))
 
