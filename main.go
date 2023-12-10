@@ -36,6 +36,10 @@ func main() {
 	r.Get("/welcome", controllers.StaticHandler(
 		views.Must(views.ParseFS(templates.FS, "welcome.gohtml"))))
 
+	r.Get("/feedback", controllers.StaticHandler(
+		views.Must(views.ParseFS(templates.FS,
+			"feedback.gohtml", "tailwind.gohtml"))))
+
 	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Page not found", http.StatusNotFound)
 	})
