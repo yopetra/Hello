@@ -1,28 +1,22 @@
 package main
 
 import (
-	"errors"
+	"database/sql"
 	"fmt"
+
+	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
 func main() {
-	err := B()
-	if errors.Is(err, ErrNotFound) {
-		fmt.Println("this is ErrNotFound type")
-	}
-	fmt.Printf("unwrapped: %v\n", errors.Unwrap(err))
-}
-
-var ErrNotFound = errors.New("not found")
-
-func A() error {
-	return ErrNotFound
-}
-
-func B() error {
-	err := A()
+	db, err := sql.Open("pgx", "host=localhost port=5433 user=baloo password=junglebook dbname=lenslocked sslmode=disable")
 	if err != nil {
-		return fmt.Errorf("b: %w", err)
+		panic(err)
 	}
-	return nil
+	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Connected!")
 }
