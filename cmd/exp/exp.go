@@ -59,23 +59,15 @@ func main() {
 	}
 	fmt.Println("Tables created.")
 
-	// name := "Jon Calhoun"
-	// email := "jon@calhoun.com"
-	// _, err = db.Exec(`
-	// INSERT INTO users (name, email)
-	// VALUES ($1, $2);`, name, email)
-	// if err != nil {
-	// panic(err)
-	// }
-	// fmt.Println("User created.")
-	name := "',''); DROP TABLE users; --"
-	email := "jon@calhoun.io"
-	query := fmt.Sprintf(`
+	name := "Jon Calhoun"
+	email := "jon@calhoun.com"
+	row := db.QueryRow(`
 	INSERT INTO users (name, email)
-	VALUES ('%s', '%s');`, name, email)
-	_, err = db.Exec(query)
+	VALUES ($1, $2) RETURNING id;`, name, email)
+	var id int
+	err = row.Scan(&id)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("User created.")
+	fmt.Println("User created. id =", id)
 }
