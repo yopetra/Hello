@@ -14,7 +14,7 @@ func main() {
 	case "compare":
 		compare(os.Args[2], os.Args[3])
 	default:
-		fmt.Println("Invalid command: %v\n", os.Args[1])
+		fmt.Printf("Invalid command: %v\n", os.Args[1])
 	}
 }
 
