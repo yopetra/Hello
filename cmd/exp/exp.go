@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"example.com/mod/models"
 	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
@@ -43,8 +44,8 @@ func main() {
 
 	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS users (
 		id SERIAL PRIMARY KEY,
-		name TEXT,
-		email TEXT NOT NULL
+		email TEXT,
+		password_hash TEXT NOT NULL
 	);
 
 	CREATE TABLE IF NOT EXISTS orders(
@@ -58,6 +59,15 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("Tables created.")
+
+	us := models.UserService{
+		DB: db,
+	}
+	user, err := us.Create("bob@bob.com", "bob123")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(user)
 
 	// name := "Jon Calhoun"
 	// email := "jon@calhoun.com"
@@ -97,37 +107,37 @@ func main() {
 	// }
 	// fmt.Println("Created fake orders.")
 
-	type Order struct {
-		ID          int
-		UserID      int
-		Amount      int
-		Description string
-	}
+	// type Order struct {
+	// 	ID          int
+	// 	UserID      int
+	// 	Amount      int
+	// 	Description string
+	// }
 
-	var orders []Order
+	// var orders []Order
 
-	userID := 1 // Use the same user ID you used in the previous lesson
-	rows, err := db.Query(`
-	SELECT id, amount, description
-	FROM orders
-	WHERE user_id=$1`, userID)
-	if err != nil {
-		panic(err)
-	}
-	defer rows.Close()
+	// userID := 1 // Use the same user ID you used in the previous lesson
+	// rows, err := db.Query(`
+	// SELECT id, amount, description
+	// FROM orders
+	// WHERE user_id=$1`, userID)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// defer rows.Close()
 
-	for rows.Next() {
-		var order Order
-		order.UserID = userID
-		err := rows.Scan(&order.ID, &order.Amount, &order.Description)
-		if err != nil {
-			panic(err)
-		}
-		orders = append(orders, order)
-	}
-	err = rows.Err()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Orders:", orders)
+	// for rows.Next() {
+	// 	var order Order
+	// 	order.UserID = userID
+	// 	err := rows.Scan(&order.ID, &order.Amount, &order.Description)
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	// 	orders = append(orders, order)
+	// }
+	// err = rows.Err()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// fmt.Println("Orders:", orders)
 }
