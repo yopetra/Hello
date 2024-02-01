@@ -51,6 +51,7 @@ func main() {
 	r.Get("/signup", usersC.New)
 	r.Post("/users", usersC.Create)
 	r.Get("/signin", usersC.SignIn)
+	r.Post("/signin", usersC.ProcessSignIn)
 
 	r.Get("/welcome", controllers.StaticHandler(
 		views.Must(views.ParseFS(templates.FS, "welcome.gohtml"))))
